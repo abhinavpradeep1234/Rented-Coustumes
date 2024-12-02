@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb fs-4">
+        <li class="breadcrumb-item">
+          <a href="{% url 'home' %}" class="text-decoration-text-none text-black"><i class="bi bi-house-door-fill"></i></a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="container">
+    {% if all_users %}
+      <table class="table table-border table-hover table-striped table-sm">
+        <thead>
+          <tr class="text-center">
+            <th scope="col">Username</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Last Login</th>
+            <th scope="col">Date Joined</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="text-center">
+          {% for user in all_users %}
+            <tr>
+              <td>{{ user.username }}</td>
+              <td>{{ user.first_name }}</td>
+              <td>{{ user.last_name }}</td>
+              <td>{{ user.last_login }}</td>
+              <td>{{ user.date_joined }}</td>
+              <td>
+                <a href="{% url 'delete_users' user.id %}">
+                  <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </a>
+                <a href="{% url 'update_users' user.id %}">
+                  <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No users found.</p>
+    {% endif %}
+  </div>
+{% endblock %}

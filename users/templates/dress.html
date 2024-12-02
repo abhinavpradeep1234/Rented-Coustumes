@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container mt-4 ms-2">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb fs-4">
+                <li class="breadcrumb-item">
+                    <a href="{% url 'home' %}" class="text-decoration-none text-black"><i class="bi bi-house-door-fill"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+            </ol>
+        </nav>
+    </div>
+    {% if all_books %}
+        <div class="container mt-4">
+            <div class="row">
+                {% for all_book in all_books %}
+                    <div class="col-md-4 mb-4">
+                        <!-- Card for each book -->
+                        <div class="card">
+                            <!-- Image container -->
+                            <div class="d-flex justify-content-center align-items-center mt-4">
+                                <img src="{{ all_book.image.url }}"
+                                     class="card-img-top"
+                                     alt="{{ all_book.book_name }}"
+                                     style="width: 100px;
+                                            height: 120px;
+                                            object-fit: cover">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title text-center">{{ all_book.name }}</h5>
+                                <p class="card-text text-center">{{ all_book.size }}</p>
+                                <p class="card-text text-center">
+                                    Per Day : <i class="bi bi-currency-rupee"></i>{{ all_book.price_per_day }}
+                                </p>
+                                <p class="card-text text-center">{{ all_book.color }}</p>
+                                <div class="d-grid gap-2 col-6 mx-auto">
+                                    <a class="btn btn-primary btn-sm" href="" role="button"><i class="bi bi-check2"></i>Book Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-success text-center" role="alert">Currently No Books Added to Library</div>
+            {% endif %}
+        </div>
+    </div>
+    <style>
+    .card {
+      width: 100%;
+      height: 390px;
+    }
+    .card-img-top {
+      width: 100px;
+      height: 120px;
+    }
+    </style>
+{% endblock content %}
