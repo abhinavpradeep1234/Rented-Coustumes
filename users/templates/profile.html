@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container mt-2">
+        <div class="border-4 rounded-4 shadow-lg  m-2 p-2">
+            <div class="text-center m-3">
+                <h5>Profile Details</h5>
+            </div>
+            <div class="row">
+                <div class="col text-center m-0 p-0">
+                    <div class="mx-auto border-primary">
+                        {% if user.profile %}
+                        <img src="{{ user.profile.url }}"
+                             alt="profile"
+                             width="200px"
+                             height="200px"
+                             id="profile-picture"
+                             class="rounded-circle">
+                        {% else %} 
+                        <img src="static/img/user_default.png" alt="profile_picture" width="200px" height="200px" id="profile-picture" class="rounded-circle">
+                        {% endif %} 
+                        <p class="fw-bold mt-2 mb-0">{{ user.username }}</p>
+                        <p class="fw-bold mt-2">{{ user.role|capfirst }}</p>
+                    </div>
+                </div>
+                <div class="col-9">
+                    <div class="card m-2">
+                        <div class="card-body">
+                            <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td class="w-25">Full Name:</td>
+                                            <td>{{ user.first_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="w-25">Last Name:</td>
+                                            <td>{{ user.last_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Email:</td>
+                                            <td>{{ user.email }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Date joined:</td>
+                                            <td>{{ user.date_joined }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Last Login:</td>
+                                            <td>{{ use.last_login }}</td>
+                                        </tr>
+                                        <div class="d-md-flex justify-content-md-end">
+                                            <a href="{% url 'update_profile' user.id%}" class="btn btn-primary btn-sm">Update</a>
+                                        </div>
+                                    </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

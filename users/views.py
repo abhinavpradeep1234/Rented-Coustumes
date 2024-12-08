@@ -1,9 +1,9 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.contrib.auth import logout
-
-# from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
-from users.models import CustomUser, Complaints, Notification
+from users.models import CustomUser, Complaints, Notification, Offers
 from django.views.generic import (
     ListView,
     CreateView,
@@ -19,6 +19,8 @@ from users.forms import (
     UserUpdateForm,
     ComplaintForm,
     RespondComplaintForm,
+    OffersForm,
+    ProfileForm,
 )
 from users.utils import create_notification
 
@@ -43,7 +45,7 @@ class SignupCreateView(CreateView):
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        for error_list in form.errors.items():
+        for error_list in form.errors.values():
             for error in error_list:
                 messages.error(self.request, error, extra_tags="alert-danger")
 
@@ -68,9 +70,13 @@ class UsersListView(LoginRequiredMixin, ListView):
     model = CustomUser
     template_name = "view_users.html"
     context_object_name = "all_users"
-    # def dispatch(self, request, *args, **kwargs):
-    #     if
-    #     return super().dispatch(request, *args, **kwargs)
+    paginate_by=6
+    ordering=['-id']
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.role != "admin":
+            return redirect("403")
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -83,6 +89,11 @@ class UsersCreateView(LoginRequiredMixin, CreateView):
     template_name = "add_update.html"
     form_class = UserCreateForm
     success_url = reverse_lazy("view_users")
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.role != "admin":
+            return redirect("403")
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -122,6 +133,11 @@ class UsersUpdateView(LoginRequiredMixin, UpdateView):
     form_class = UserUpdateForm
     success_url = reverse_lazy("view_users")
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.role != "admin":
+            return redirect("403")
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["page_title"] = "Update User"
@@ -146,6 +162,11 @@ class UsersUpdateView(LoginRequiredMixin, UpdateView):
 class UsersDeleteView(LoginRequiredMixin, DeleteView):
     model = CustomUser
     success_url = reverse_lazy("view_users")
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.role != "admin":
+            return redirect("403")
+        return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         return super().delete(request, *args, **kwargs)
@@ -180,6 +201,11 @@ class AdminDashBoardListView(LoginRequiredMixin, ListView):
     model = Complaints
     template_name = "admin_dashboard.html"
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.role != "admin":
+            return redirect("403")
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["page_title"] = "Admin DashBoard"
@@ -193,6 +219,8 @@ class ComplaintListView(LoginRequiredMixin, ListView):
     model = Complaints
     template_name = "view_complaints.html"
     context_object_name = "all_complaintss"  # Set the context object name
+    paginate_by=6
+    ordering=['-id']
 
     def get_queryset(self):
         return Complaints.objects.filter(username=self.request.user)
@@ -220,6 +248,13 @@ class ComplaintCreateView(LoginRequiredMixin, CreateView):
         complaint = form.save(commit=False)
         complaint.username = self.request.user
         complaint.save()
+        admins = CustomUser.objects.filter(role="admin")
+        for admin in admins:
+            create_notification(
+                admin, f"user {self.request.user} registered complaint check it now"
+            )
+
+        create_notification(self.request.user, "Registerd Complaints Successfully")
         messages.success(
             self.request, "Complaint Register Successfully", extra_tags="alert-success"
         )
@@ -279,6 +314,13 @@ class AllComplaintListView(LoginRequiredMixin, ListView):
     model = Complaints
     template_name = "all_complaints.html"
     context_object_name = "all_complaints"
+    paginate_by=6
+    ordering=['-id']
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.role != "admin":
+            return redirect("403")
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -295,6 +337,11 @@ class RespondComplaintView(LoginRequiredMixin, UpdateView):
     form_class = RespondComplaintForm
     success_url = reverse_lazy("all_complaints")
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.role != "admin":
+            return redirect("403")
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["page_title"] = "Respond Complaint"
@@ -304,6 +351,10 @@ class RespondComplaintView(LoginRequiredMixin, UpdateView):
         messages.success(
             self.request, "Response Created Successfully", extra_tags="alert-success"
         )
+        admins = CustomUser.objects.filter(role="admin")
+        for admin in admins:
+            create_notification(admin, "Authority respond complaint check it now")
+
         return super().form_valid(form)
 
     def form_invalid(self, form):
@@ -314,7 +365,7 @@ class RespondComplaintView(LoginRequiredMixin, UpdateView):
         return super().form_invalid(form)
 
 
-class AllNotificationView(ListView):
+class AllNotificationView(LoginRequiredMixin, ListView):
     model = Notification
     template_name = "view_notification.html"
 
@@ -323,7 +374,119 @@ class AllNotificationView(ListView):
         context["page_title"] = "View Notification"
         context["all_notification"] = Notification.objects.filter(
             username=self.request.user
-        )
+        ).order_by("-id")
         return context
 
 
+@login_required(login_url="signup")
+def is_read(request, pk):
+    to_read = get_object_or_404(Notification, id=pk)
+    to_read.is_read = True
+    to_read.save()
+    return redirect("view_notification")
+
+
+# offers
+class AllOffersView(LoginRequiredMixin, ListView):
+    model = Offers
+    template_name = "add_view_offers.html"
+    context_object_name = "all_offers"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "View Offers"
+
+        return context
+
+
+class AddOffersView(LoginRequiredMixin, CreateView):
+    model = Offers
+    template_name = "add_update.html"
+    form_class = OffersForm
+    success_url = reverse_lazy("view_offers")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Add Offers"
+
+        return context
+
+    def form_valid(self, form):
+        messages.success(
+            self.request, "Offers Added Successfully", extra_tags="alert-success"
+        )
+        users = CustomUser.objects.all()
+        for user in users:
+            create_notification(user, "New Exclusive Offers Added Check it now !!")
+
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        for error_list in form.errors.values():
+            for errors in error_list:
+                messages.error(self.request, errors, extra_tags="alert-danger")
+        return super().form_invalid(form)
+
+
+class DeleteOffersView(DeleteView):
+    model = Offers
+    success_url = reverse_lazy("view_offers")
+
+    def get(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(
+            self.request, "Offers Deleted Successfully", extra_tags="alert-danger"
+        )
+
+        return super().delete(request, *args, **kwargs)
+
+
+# profile
+class ProfileView(LoginRequiredMixin, ListView):
+    model = CustomUser
+    template_name = "profile.html"
+    context_object_name = "all_user"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Profile"
+
+        return context
+
+
+class UpdateProfileView(UpdateView):
+    model = CustomUser
+    template_name = "add_update.html"
+    form_class = ProfileForm
+    success_url = reverse_lazy("profile")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Update Profile"
+
+        return context
+
+    def form_valid(self, form):
+        messages.success(
+            self.request, "Profile Updated Successfully", extra_tags="alert-success"
+        )
+
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        for error_list in form.errors.values():
+            for errors in error_list:
+                messages.error(self.request, errors, extra_tags="alert-danger")
+        return super().form_invalid(form)
+
+
+class Unrestricted(TemplateView):
+    template_name = "403.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "403"
+
+        return context

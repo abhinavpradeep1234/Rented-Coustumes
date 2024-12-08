@@ -1,7 +1,7 @@
 from django import forms
 from users.models import CustomUser
 from django.contrib.auth.forms import UserCreationForm
-from users.models import Complaints
+from users.models import Complaints, Offers
 
 
 class SignupForm(UserCreationForm):
@@ -59,6 +59,30 @@ class RespondComplaintForm(forms.ModelForm):
     class Meta:
         model = Complaints
         fields = ["respond"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({"class": "form-control"})
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ["username", "first_name", "last_name", "email", "profile"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({"class": "form-control"})
+            self.fields['username'].help_text=" "
+
+
+
+class OffersForm(forms.ModelForm):
+    class Meta:
+        model = Offers
+        fields = ["offers"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

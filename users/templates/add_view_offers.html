@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb fs-4">
+        <li class="breadcrumb-item">
+          <a href="{% url 'home' %}" class="text-decoration-text-none text-black">
+            <i class="bi bi-house-door-fill"></i>
+          </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <a href="{% url 'add_offers' %}" class="btn btn-primary">Add offers</a>
+  </div>
+  {% if all_offers %}
+    {% for offers in all_offers %}
+      <div class="alert alert-primary  mt-2" role="alert">
+        Rented Coustume -{{ offers }}  {{ date_time }}
+        <button type="button"
+                class="btn btn-danger btn-sm"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModalLabel{{ offers.id }}">Delete</button>
+      </div>
+      <!-- Modal -->
+      <div class="modal fade"
+           id="exampleModalLabel{{ offers.id }}"
+           tabindex="-1"
+           aria-labelledby="exampleModalLabel{{ offers.id }}"
+           aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel{{ offers.id }}">Delete Confirmation</h1>
+              <button type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"></button>
+            </div>
+            <div class="modal-body">Are you sure you want to Delete</div>
+            <div class="modal-footer">
+              <a href="{% url 'delete_offers' offers.id %}">
+                <button type="submit" class="btn btn-danger btn-sm">Confirm Delete</button>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="alert alert-warning text-center ms-4 me-4 mt-2" role="alert">Currently no new Offers Yet !!!</div>
+  {% endif %}
+{% endblock content %}
+

@@ -3,7 +3,7 @@ from . import views
 
 urlpatterns = [
     path("", views.SignupCreateView.as_view(), name="signup"),
-    path("", views.user_logout, name="user_logout"),
+    path("logout", views.user_logout, name="user_logout"),
     path("home/", views.HomeView.as_view(), name="home"),
     path("view/users", views.UsersListView.as_view(), name="view_users"),
     path("create/users", views.UsersCreateView.as_view(), name="create_users"),
@@ -47,5 +47,42 @@ urlpatterns = [
         "view/notification",
         views.AllNotificationView.as_view(),
         name="view_notification",
+    ), 
+    path(
+        "notification/is_read/<int:pk>",
+        views.is_read,
+        name="is_read",
+    ),
+    # offers
+    path(
+        "view/offers",
+        views.AllOffersView.as_view(),
+        name="view_offers",
+    ),
+    path(
+        "add/offers",
+        views.AddOffersView.as_view(),
+        name="add_offers",
+    ),
+    path(
+        "delete/offers/<int:pk>",
+        views.DeleteOffersView.as_view(),
+        name="delete_offers",
+    ),
+    # profile
+    path(
+        "profile",
+        views.ProfileView.as_view(),
+        name="profile",
+    ),
+    path(
+        "update/profile/<int:pk>",
+        views.UpdateProfileView.as_view(),
+        name="update_profile",
+    ),
+    path(
+        "403",
+        views.Unrestricted.as_view(),
+        name="403",
     ),
 ]

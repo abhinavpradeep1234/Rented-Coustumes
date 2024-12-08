@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
- 
   <div class="container">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb fs-4">
@@ -66,10 +65,9 @@
             </div>
           </div>
         {% endfor %}
-        <!-- Button trigger modal -->
-        <!-- Modal -->
+  
       </table>
     {% else %}
-      <div class="alert alert-success text-center" role="alert">Currently No Rented Booking Yet !!!</div>
+      <div class="alert alert-primary text-center" role="alert">Currently No Logged users Yet !!!</div>
     {% endif %}
   {% endblock content %}

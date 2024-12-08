@@ -30,7 +30,7 @@
       left: 0;
       height: 100vh;
       width: 250px;
-      background-color:skyblue;
+      background-color:black;
       color: black;
       z-index: 1000;
       overflow-y: auto;
@@ -42,7 +42,7 @@
     }
 
     nav.sidebar .nav-link:hover {
-      background-color:lightgreen; /* Darker shade for hover */
+      background-color:blue; /* Darker shade for hover */
       color: #f0ad4e; /* Change text color to a noticeable shade */
       border-radius: 5px; /* Optional: rounded corners */
     }
@@ -72,26 +72,56 @@
     <!-- Sidebar -->
     <nav class="sidebar text-white p-3">
       <div class="d-grid col-8 mx-auto">
-        <img src="{% static 'img/user_default.png' %}"
+        <img src="{% static 'img/uu.png' %}"
              alt="Logo"
-             class="img-fluid"
+             class="img-fluid mb-3"
              height="70"
              width="110">
+        {% if user.profile %}
+          <img src="{{ user.profile.url }}"
+               alt="profile"
+               width="200px"
+               height="200px"
+               id="profile-picture"
+               class="rounded-circle img-fluid">
+        {% else %}
+          <img src="static/img/user_default.png"
+               alt="profile_picture"
+               width="110px"
+               height="90px"
+               id="profile-picture"
+               class="rounded-circle">
+        {% endif %}
       </div>
       <ul class="nav flex-column">
         <li class="nav-item">
-          <h4 class="text-center mt-4 text-black">{{ user }}</h4>
+          <h4 class="text-center mt-4 text-white">{{ user }}</h4>
+          
         </li>
         <li class="nav-item">
-          <a class="nav-link active text-decoration-none text-black"
+          <a class="nav-link active text-decoration-none text-white"
              href="{% url 'dashboard' %}">
             <i class="bi bi-layout-text-window fs-5"></i><span class="ms-3">Dashboard</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active text-decoration-none text-black"
-             href="{% url 'collections' %}">
-            <i class="bi bi-cart fs-5"></i><span class="ms-3">Rented Collections</span>
+          <a class="nav-link active text-decoration-none text-white"
+             href="{% url 'profile' %}">
+            <i class="bi bi-person-fill fs-5"></i><span class="ms-3">Profile</span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link active text-decoration-none text-white"
+             href="{% url 'view_offers' %}">
+            <i class="bi bi-megaphone-fill fs-5"></i> <span class="ms-3">Offers</span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link active text-decoration-none text-white"
+             href="{% url 'view_notification' %}">
+            <i class="bi bi-bell fs-5"></i><span class="ms-3">Notification</span>
           </a>
         </li>
         {% comment %} <li class="nav-item">
@@ -102,13 +132,13 @@
           </a>
         </li> {% endcomment %}
         <li class="nav-item">
-          <a class="nav-link active text-decoration-none text-black"
+          <a class="nav-link active text-decoration-none text-white"
              href="{% url 'view_complaints' %}">
             <i class="bi bi-question-circle-fill fs-5"></i><span class="ms-3">Complaint</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active text-decoration-none text-black"
+          <a class="nav-link active text-decoration-none text-white"
              href="{% url 'user_logout' %}">
             <i class="bi bi-power fs-5"></i>
             <span class="ms-3">Logout</span>
@@ -119,9 +149,9 @@
     <!-- Main Content -->
     <div class="main-content">
       <nav class="navbar navbar-expand-lg navbar-dark border-bottom"
-           style="background-color:skyblue">
+           style="background-color:black">
         <div class="container-fluid">
-          <a class="navbar-brand text-black" href="#">{{ page_title }} / Rented Coustumes</a>
+          <a class="navbar-brand text-white" href="#">{{ page_title }} / Rented Coustumes</a>
           <ul class="navbar-nav ms-auto">
             {% comment %} <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
