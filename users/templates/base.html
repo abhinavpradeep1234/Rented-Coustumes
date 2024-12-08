@@ -96,12 +96,18 @@
       <ul class="nav flex-column">
         <li class="nav-item">
           <h4 class="text-center mt-4 text-white">{{ user }}</h4>
-          
         </li>
         <li class="nav-item">
           <a class="nav-link active text-decoration-none text-white"
              href="{% url 'dashboard' %}">
             <i class="bi bi-layout-text-window fs-5"></i><span class="ms-3">Dashboard</span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link active text-decoration-none text-white"
+             href="{% url 'view_rented_costumes' %}">
+            <i class="bi bi-cart3 fs-5"></i> <span class="ms-3">Rented Collections</span>
           </a>
         </li>
         <li class="nav-item">
@@ -110,14 +116,12 @@
             <i class="bi bi-person-fill fs-5"></i><span class="ms-3">Profile</span>
           </a>
         </li>
-
         <li class="nav-item">
           <a class="nav-link active text-decoration-none text-white"
              href="{% url 'view_offers' %}">
             <i class="bi bi-megaphone-fill fs-5"></i> <span class="ms-3">Offers</span>
           </a>
         </li>
-
         <li class="nav-item">
           <a class="nav-link active text-decoration-none text-white"
              href="{% url 'view_notification' %}">

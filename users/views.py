@@ -70,8 +70,8 @@ class UsersListView(LoginRequiredMixin, ListView):
     model = CustomUser
     template_name = "view_users.html"
     context_object_name = "all_users"
-    paginate_by=6
-    ordering=['-id']
+    paginate_by = 6
+    ordering = ["-id"]
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.role != "admin":
@@ -219,8 +219,8 @@ class ComplaintListView(LoginRequiredMixin, ListView):
     model = Complaints
     template_name = "view_complaints.html"
     context_object_name = "all_complaintss"  # Set the context object name
-    paginate_by=6
-    ordering=['-id']
+    paginate_by = 6
+    ordering = ["-id"]
 
     def get_queryset(self):
         return Complaints.objects.filter(username=self.request.user)
@@ -314,8 +314,8 @@ class AllComplaintListView(LoginRequiredMixin, ListView):
     model = Complaints
     template_name = "all_complaints.html"
     context_object_name = "all_complaints"
-    paginate_by=6
-    ordering=['-id']
+    paginate_by = 6
+    ordering = ["-id"]
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.role != "admin":
