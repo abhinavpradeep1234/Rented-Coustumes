@@ -26,7 +26,7 @@ class RentedCostumeListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["page_title"] = "Rented Costumes"
+        context["page_title"] = "Rented Collections"
         return context
 
 
@@ -108,3 +108,93 @@ class RentedCostumeDeleteView(LoginRequiredMixin, DeleteView):
             self.request, "Costumes Deleted Successfully", extra_tags="alert-success"
         )
         return super().delete(request, *args, **kwargs)
+
+
+# filter wise collections
+class TrendingListView(LoginRequiredMixin, ListView):
+    model = RentedCostumes
+    context_object_name = "all_rented_costumes"
+    template_name = "trending_coustumes.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.role != "admin":
+            return redirect("403")
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Trending Collections"
+        context["all_rented_costumes"] = RentedCostumes.objects.filter(
+            costume_categories="trending costumes"
+        )
+        return context
+
+
+class CasualListView(LoginRequiredMixin, ListView):
+    model = RentedCostumes
+    context_object_name = "all_rented_costumes"
+    template_name = "casual_coustumes.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Casual Collections"
+        context["all_rented_costumes"] = RentedCostumes.objects.filter(
+            costume_categories="casual costumes"
+        )
+        return context
+
+
+class FormalListView(LoginRequiredMixin, ListView):
+    model = RentedCostumes
+    context_object_name = "all_rented_costumes"
+    template_name = "trending_coustumes.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Formal Collections"
+        context["all_rented_costumes"] = RentedCostumes.objects.filter(
+            costume_categories="formal costumes"
+        )
+        return context
+
+
+class DanceWearListView(LoginRequiredMixin, ListView):
+    model = RentedCostumes
+    context_object_name = "all_rented_costumes"
+    template_name = "dance_costumes.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Dance Costume Collections"
+        context["all_rented_costumes"] = RentedCostumes.objects.filter(
+            costume_categories="dance costumes"
+        )
+        return context
+
+
+class PartyWearListView(LoginRequiredMixin, ListView):
+    model = RentedCostumes
+    context_object_name = "all_rented_costumes"
+    template_name = "trending_coustumes.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Party Wear Collections"
+        context["all_rented_costumes"] = RentedCostumes.objects.filter(
+            costume_categories="party wear"
+        )
+        return context
+
+
+class SweaterCollectionListView(LoginRequiredMixin, ListView):
+    model = RentedCostumes
+    context_object_name = "all_rented_costumes"
+    template_name = "sweater_collections.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Sweater Collections"
+        context["all_rented_costumes"] = RentedCostumes.objects.filter(
+            costume_categories="sweater"
+        )
+        return context

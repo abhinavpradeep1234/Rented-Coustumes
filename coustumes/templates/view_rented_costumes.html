@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+    {% load static %}
     <div class="container">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb fs-4">
@@ -14,90 +15,42 @@
         <a href="{% url 'create_rented_costumes' %}"
            class="btn btn-primary btn-sm">Add Costumes</a>
     </div>
-    {% if all_rented_costumes %}
-        <div class="container">
-            <div class="row  row-cols-lg-4 g-4">
-                {% for rented_costumes in all_rented_costumes %}
-                    <div class="col">
-                        <div class="card h-100">
-                            <img src="{{ rented_costumes.image.url }}"
-                                 class="card-img-top  "
-                                 alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ rented_costumes.item_name }}</h5>
-                                <p class="card-text">
-                                    <i class="bi bi-currency-rupee"></i>{{ rented_costumes.per_date_price }}
-                                </p>
-                                <div class="d-grid gap-2 col-6 mx-auto">
-                                    <div class="btn-group" role="group">
-                                    <a href="{% url 'update_rented_costumes' rented_costumes.id %}"
-                                       class="btn btn-success btn-sm">Update</a>
-                                    <button type="button"
-                                            class="btn btn-danger btn-sm"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#exampleModal{{ rented_costumes.id }}">Delete</button>
-                                        </div>
-                                    </div>
-                                </div>
-                        </div>
-                    </div>
-                    <div class="modal fade"
-                         id="exampleModal{{ rented_costumes.id }}"
-                         tabindex="-1"
-                         aria-labelledby="exampleModalLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5"
-                                        id="exampleModalLabel{{ rented_costumes.id }}">Confirm Delete</h1>
-                                    <button type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">Are you Sure you want to Delete</div>
-                                <div class="modal-footer">
-                                    <a href="{% url 'delete_rented_costumes' rented_costumes.id %}"
-                                       class="btn btn-danger btn-sm">Confirm Delete</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
+    <div class="row">
+        <div class="card mb-4 me-4 ms-4" style="width: 18rem;">
+            <a href="{% url 'view_trending_item' %}">
+                <img src="{% static 'img/55.png' %}" class="card-img-top" alt="...">
+            </a>
+            <div class="card-body"></div>
         </div>
-        {% comment %} {% for rented_costumes in all_rented_costumes %}
-            <div class="row">
-                <div class="card" style="width: 18rem;">
-                    <img src="{{ rented_costumes.image.url }}" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ rented_costumes.item_name }}</h5>
-                        <p class="card-text">
-                            <i class="bi bi-currency-rupee"></i>{{ rented_costumes.per_date_price }}
-                        </p>
-                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal{{ rented_costumes.id }}">Delete</button>
-                        <a href="{% url 'update_rented_costumes' rented_costumes.id %}" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                </div>
-            </div>
-            <div class="modal fade" id="exampleModal{{ rented_costumes.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel{{ rented_costumes.id }}">Confirm Delete</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">Are you Sure you want to Delete</div>
-                        <div class="modal-footer">
-                            <a href="{% url 'delete_rented_costumes' rented_costumes.id %}" class="btn btn-danger btn-sm">Confirm Delete</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        {% endfor %} {% endcomment %}
-    {% else %}
-        non
-    {% endif %}
-    <!-- Button trigger modal -->
+        <div class="card mb-4 me-4 ms-4" style="width: 18rem;">
+            <a href="{% url 'view_casual_item' %}">
+                <img src="{% static 'img/2.png' %}" class="card-img-top" alt="...">
+            </a>
+            <div class="card-body"></div>
+        </div>
+        <div class="card mb-4 me-4 ms-4" style="width: 18rem;">
+            <a href="{% url 'view_formal_item' %}">
+                <img src="{% static 'img/12.png' %}" class="card-img-top" alt="...">
+            </a>
+            <div class="card-body"></div>
+        </div>
+        <div class="card mb-4 me-4 ms-4" style="width: 18rem;">
+            <a href="{% url 'view_dance_item' %}">
+                <img src="{% static 'img/1.png' %}" class="card-img-top" alt="...">
+            </a>
+            <div class="card-body"></div>
+        </div>
+        <div class="card mb-4 me-4 ms-4" style="width: 18rem;">
+            <a href="{% url 'view_party_wear' %}">
+                <img src="{% static 'img/3.png' %}" class="card-img-top" alt="...">
+            </a>
+            <div class="card-body"></div>
+        </div>
+        <div class="card mb-4 me-4 ms-4" style="width: 18rem;">
+            <a href="{% url 'view_sweater' %}">
+                <img src="{% static 'img/983.png' %}" class="card-img-top" alt="...">
+            </a>
+            <div class="card-body"></div>
+        </div>
+    </div>
 {% endblock content %}

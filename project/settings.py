@@ -83,6 +83,18 @@ DATABASES = {
     }
 }
 
+# for external database
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME":"rented_costumes",
+#         "USER":"postgres",
+#         "PASSWORD":"1234",
+#         "HOST":"localhost",
+#         "PORT":5433
+#     }
+# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
