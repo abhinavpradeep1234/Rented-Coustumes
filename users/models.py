@@ -6,7 +6,7 @@ from django.contrib.auth.models import AbstractUser
 class CustomUser(AbstractUser):
     ROLE = (("admin", "Admin"),)
     role = models.CharField(max_length=200, choices=ROLE)
-    profile = models.ImageField(upload_to="profile", null=True, blank=True)
+    profile = models.ImageField(upload_to="profile", null=True, blank=True,default="static/img/user_default.png")
 
 
 

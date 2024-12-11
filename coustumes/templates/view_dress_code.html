@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb fs-4">
+                <li class="breadcrumb-item">
+                    <a href="{% url 'home' %}" class="text-decoration-text-none text-black"><i class="bi bi-house-door-fill"></i></a>
+                </li>
+                {% comment %} <li class="breadcrumb-item">
+                    <a href="{% url 'view_rented_costumes' %}"
+                       class="text-decoration-none text-black"></a>
+                </li> {% endcomment %}
+                <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <a href="{% url 'create_dress_code' %}"
+           class="btn btn-primary btn-sm">Dress Code</a>
+    </div>
+    {% if all_dress %}
+        <div class="container mt-4">
+            <div class="row  row-cols-lg-4 g-4">
+                {% for dress in all_dress %}
+                    <div class="col">
+                        <div class="card h-190">
+                            <div class="d-flex justify-content-center align-items-center mt-4 ms-4 me-4">
+                                <img src="{{ dress.image.url }}"
+                                     class="card-img-top"
+                                     width="100px"
+                                     height="160px"
+                                     alt="...">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title text-center">{{ dress.name }}</h5>
+                                <p class="card-text text-center">
+                                    Per Day <i class="bi bi-currency-rupee"></i>{{ dress.price }}
+                                    <p class="card-text text-center">
+                                        Material : {{ dress.material }}
+                                        {% comment %} <button type="button" class=" btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                   More Details
+                                        </button> {% endcomment %}
+                                    </p>
+                                </p>
+                                <div class="d-grid gap-2 col-6 mx-auto">
+                                    <div class="btn-group" role="group">
+                                       <a href="{% url 'update_dress_code' dress.id %}"
+    class="btn btn-success btn-sm">Update</a> 
+                                        <button type="button"
+                                                class="btn btn-danger btn-sm"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#exampleModal{{ dress.id }}">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade"
+                         id="exampleModal{{  dress.id}}"
+                         tabindex="-1"
+                         aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5"
+                                        id="exampleModalLabel{{  dress.id }}">Confirm Delete</h1>
+                                    <button type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">Are you Sure you want to Delete</div>
+                                <div class="modal-footer">
+                                     <a href="{% url 'delete_dress_code'  dress.id %}"
+    class="btn btn-danger btn-sm">Confirm Delete</a> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% comment %} <!-- details -->
+                    <div class="modal fade"
+                         id="exampleModal"
+                         tabindex="-1"
+                         aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Detail</h1>
+                                    <button type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="card mb-3">
+                                        <div class="card-body">Material : {{ rented_costumes.material }} , colour : {{ rented_costumes.colour }}</div>
+                                    </div>
+                                    <div class="card mb-4">
+                                        <div class="card-body">Description : {{ rented_costumes.description }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> {% endcomment %}
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-primary text-center" role="alert">No dress code added at the moment</div>
+    {% endif %}
+{% endblock content %}

@@ -60,4 +60,36 @@ urlpatterns = [
         views.SweaterCollectionListView.as_view(),
         name="view_sweater",
     ),
+    path(
+        "rented/book/",
+        views.booking_rented_collections,
+        name="booking_rented_collections",
+    ),
+    # path(
+    #     "booking/updated/<int:pk>",
+    #     views.BookingRentedCostumeUpdateView.as_view(),
+    #     name="update_rented_costumes",
+    # ),
+    path(
+        "delete/booking/<int:pk>",
+        views.BookingRentedCostumeDeleteView.as_view(),
+        name="delete_rented_costumes",
+    ),
+    # dress code  CRUD
+    path("dress/code", views.DressCodeListView.as_view(), name="dress_code"),
+    path(
+        "dress/code/create",
+        views.DressCodeCreateView.as_view(),
+        name="create_dress_code",
+    ),
+    path(
+        "dress/code/update/<int:pk>",
+        views.DressCodeUpdateView.as_view(),
+        name="update_dress_code",
+    ),
+    path(
+        "dress/code/delete/<int:pk>",
+        views.DressCodeDeleteView.as_view(),
+        name="delete_dress_code",
+    ),
 ]

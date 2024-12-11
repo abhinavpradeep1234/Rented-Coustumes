@@ -8,21 +8,22 @@ from django.views.generic import (
 )
 from django.contrib import messages  # type: ignore
 from django.contrib.auth.mixins import LoginRequiredMixin  # type: ignore
-from coustumes.forms import RentedCostumeForm
-from coustumes.models import RentedCostumes
+from coustumes.forms import (
+    RentedCostumeForm,
+    BookingRentedCollectionForm,
+    DressCodeForm,
+)
+from coustumes.models import RentedCostumes, BookingRentedCostumes, DressCode
 from users.utils import create_notification
 from users.models import CustomUser
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 
 class RentedCostumeListView(LoginRequiredMixin, ListView):
     model = RentedCostumes
     context_object_name = "all_rented_costumes"
     template_name = "view_rented_costumes.html"
-
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.role != "admin":
-            return redirect("403")
-        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -147,7 +148,7 @@ class CasualListView(LoginRequiredMixin, ListView):
 class FormalListView(LoginRequiredMixin, ListView):
     model = RentedCostumes
     context_object_name = "all_rented_costumes"
-    template_name = "trending_coustumes.html"
+    template_name = "formal_coustumes.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -198,3 +199,140 @@ class SweaterCollectionListView(LoginRequiredMixin, ListView):
             costume_categories="sweater"
         )
         return context
+
+
+#
+@login_required(login_url="signup")
+def booking_rented_collections(request):
+    # rented_costumes=get_object_or_404(RentedCostumes,id=pk)
+
+    if request.method == "POST":
+
+        form = BookingRentedCollectionForm(request.POST)
+        if form.is_valid():
+            booking = form.save(commit=False)
+            booking.username = request.user
+            booking.save()
+            messages.success(
+                request,
+                "Booking SuccessFully delivery except 2 days",
+                extra_tags="alert-success",
+            )
+            return redirect("dashboard")
+        else:
+            for error_list in form.errors.values():
+                for errors in error_list:
+                    messages.error(request, errors, extra_tags="alert-danger")
+
+    context = {"form": BookingRentedCollectionForm, "page_title": "Book Now"}
+    return render(request, "add_update.html", context)
+
+
+# class BookingRentedCostumeUpdateView(LoginRequiredMixin,DeleteView):
+#     model=
+
+
+class BookingRentedCostumeDeleteView(DeleteView):
+    def get(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(
+            self.request, "Deleted Successfully", extra_tags="alert-success"
+        )
+        return super().delete(request, *args, **kwargs)
+
+#dress Code Crud
+class DressCodeListView(LoginRequiredMixin, ListView):
+    model = DressCode
+    context_object_name = "all_dress"
+    template_name = "view_dress_code.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = " Dress Code"
+        return context
+
+
+class DressCodeCreateView(LoginRequiredMixin, CreateView):
+    model = DressCode
+    success_url = reverse_lazy("dress_code")
+    template_name = "add_update.html"
+
+    form_class = DressCodeForm
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.role != "admin":
+            return redirect("403")
+
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Add Dress Code"
+        return context
+
+    def form_valid(self, form):
+        messages.success(
+            self.request, "Dress code Added Successfully ", extra_tags="alert-success"
+        )
+
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        for error_list in form.errors.values():
+            for errors in error_list:
+                messages.error(self.request, errors, extra_tags="alert-danger")
+        return super().form_invalid(form)
+
+
+class DressCodeUpdateView(LoginRequiredMixin, UpdateView):
+    model = DressCode
+    success_url = reverse_lazy("dress_code")
+    template_name = "add_update.html"
+
+    form_class = DressCodeForm
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.role != "admin":
+            return redirect("403")
+
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Updated Dress Code"
+        return context
+
+    def form_valid(self, form):
+        messages.success(
+            self.request, "Dress code Updated Successfully ", extra_tags="alert-success"
+        )
+
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        for error_list in form.errors.values():
+            for errors in error_list:
+                messages.error(self.request, errors, extra_tags="alert-danger")
+        return super().form_invalid(form)
+
+
+class DressCodeDeleteView(LoginRequiredMixin, DeleteView):
+    model = DressCode
+    success_url = reverse_lazy("dress_code")
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.role != "admin":
+            return redirect("403")
+
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(
+            self.request, "Deleted Successfully", extra_tags="alert-success"
+        )
+        return super().delete(request, *args, **kwargs)

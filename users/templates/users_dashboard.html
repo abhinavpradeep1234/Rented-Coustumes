@@ -10,7 +10,7 @@
       </ol>
     </nav>
   </div>
-  {% if all_complaintss %}
+  {% if all_bookings %}
     <div class="container">
       <table class="table  table-striped table-hover table-border table-sm">
         <thead>
@@ -23,33 +23,32 @@
           </thead>
         </tr>
         <tbody class="table-group divider">
-          {% for complaints in all_complaintss %}
+          {% for bookings in all_bookings %}
             <tr class="text-center">
-              <td>{{ complaints.username }}</td>
-              <td>{{ complaints.report }}</td>
-              <td>{{ complaints.reported_date }}</td>
-              <td>{{ complaints.respond|default:"No Respond" }}</td>
+              <td>{{ bookings.username }}</td>
+              <td>{{ bookings.booked_date }}</td>
+              <td>{{ bookings.return_date }}</td>
+              <td>{{ booking.address }}</td>
               <td>
                 <button type="button"
                         class="btn btn-danger btn-sm"
                         data-bs-toggle="modal"
-                        data-bs-target="#exampleModal">Cancel</button>
+                        data-bs-target="#exampleModal{{ bookings.id }}">Cancel</button>
               </td>
               <td>
-                <a href="{% url 'update_complaints' complaints.id %}"
-                   class="btn btn-primary btn-sm">Update</a>
+                {% comment %} <a href="{% url 'update_complaints' complaints.id %}" class="btn btn-primary btn-sm">Update</a> {% endcomment %}
               </td>
             </tbody>
           </tr>
           <div class="modal fade"
-               id="exampleModal"
+               id="exampleModalLabel{{ bookings.id }}"
                tabindex="-1"
-               aria-labelledby="exampleModalLabel"
+               aria-labelledby="exampleModalLabel{{ bookings.id }}"
                aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                  <h1 class="modal-title fs-5" id="exampleModalLabel{{ bookings.id }}">Confirm Delete</h1>
                   <button type="button"
                           class="btn-close"
                           data-bs-dismiss="modal"
@@ -57,7 +56,7 @@
                 </div>
                 <div class="modal-body">Are you sure you want to delete</div>
                 <div class="modal-footer">
-                  <a href="{% url 'delete_complaints' complaints.id %}">
+                  <a href="{% url 'delete_rented_costumes' bookings.id %}">
                     <button type="button" class="btn btn-delete btn-sm">confirm Delete</button>
                   </a>
                 </div>
@@ -65,9 +64,8 @@
             </div>
           </div>
         {% endfor %}
-  
       </table>
     {% else %}
-      <div class="alert alert-primary text-center" role="alert">Currently No Logged users Yet !!!</div>
+      <div class="alert alert-primary text-center" role="alert">Currently No Boooking Yet !!!</div>
     {% endif %}
   {% endblock content %}

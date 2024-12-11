@@ -72,7 +72,7 @@
     <!-- Sidebar -->
     <nav class="sidebar text-white p-3">
       <div class="d-grid col-8 mx-auto">
-        <img src="{% static 'img/uu.png' %}"
+        <img src="{% static 'img/5.png' %}"
              alt="Logo"
              class="img-fluid mb-3"
              height="70"
@@ -108,6 +108,14 @@
           <a class="nav-link active text-decoration-none text-white"
              href="{% url 'view_rented_costumes' %}">
             <i class="bi bi-cart3 fs-5"></i> <span class="ms-3">Rented Collections</span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link active text-decoration-none text-white"
+             href="{% url 'dress_code' %}">
+             <i class="fa-solid fa-shirt"></i>
+             <span class="ms-3">Dress Code</span>
           </a>
         </li>
         <li class="nav-item">

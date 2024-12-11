@@ -24,7 +24,7 @@ from users.forms import (
 )
 from users.utils import create_notification
 
-
+from coustumes.models import BookingRentedCostumes
 class SignupCreateView(CreateView):
     template_name = "registration/signup.html"
     model = CustomUser
@@ -124,7 +124,7 @@ def user_logout(request):
         "You have been logged out!",
         extra_tags="alert-success",
     )
-    return redirect("user_logout")
+    return redirect("signup")
 
 
 class UsersUpdateView(LoginRequiredMixin, UpdateView):
@@ -188,12 +188,14 @@ def dashboard(request):
 
 
 class UserDashBoardListView(LoginRequiredMixin, ListView):
-    model = CustomUser
+    model = BookingRentedCostumes
     template_name = "users_dashboard.html"
+    context_object_name = "all_bookings"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["page_title"] = "User DashBoard"
+        context["all_bookings"] = BookingRentedCostumes.objects.filter(username=self.request.user)
         return context
 
 
