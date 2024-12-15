@@ -12,6 +12,7 @@ from coustumes.forms import (
     RentedCostumeForm,
     BookingRentedCollectionForm,
     DressCodeForm,
+    DressCodeEnquiryForm,
 )
 from coustumes.models import RentedCostumes, BookingRentedCostumes, DressCode
 from users.utils import create_notification
@@ -116,11 +117,6 @@ class TrendingListView(LoginRequiredMixin, ListView):
     model = RentedCostumes
     context_object_name = "all_rented_costumes"
     template_name = "trending_coustumes.html"
-
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.role != "admin":
-            return redirect("403")
-        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -242,7 +238,8 @@ class BookingRentedCostumeDeleteView(DeleteView):
         )
         return super().delete(request, *args, **kwargs)
 
-#dress Code Crud
+
+# dress Code Crud
 class DressCodeListView(LoginRequiredMixin, ListView):
     model = DressCode
     context_object_name = "all_dress"
@@ -336,3 +333,89 @@ class DressCodeDeleteView(LoginRequiredMixin, DeleteView):
             self.request, "Deleted Successfully", extra_tags="alert-success"
         )
         return super().delete(request, *args, **kwargs)
+
+
+# enquiry Dress code CRUD
+class EnquiryCreateView(LoginRequiredMixin, CreateView):
+    model = DressCode
+    form_class = DressCodeEnquiryForm
+    template_name = "add_update.html"
+    success_url = reverse_lazy("dashboard")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Dress Code Enquiry"
+        return context
+
+    def form_valid(self, form):
+        name = form.save(commit=False)
+        name.username = self.request.user
+        name.save()
+        messages.success(
+            self.request,
+            "Dress Code enquiry Submitted Successfully Our team will respond your enquiry soon",
+            extra_tags="alert-success",
+        )
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        for error_list in form.errors.values():
+            for errors in error_list:
+                messages.error(self.request, errors, extra_tags="alert-danger")
+        return super().form_invalid(form)
+
+
+class EnquiryUpdateView(LoginRequiredMixin, UpdateView):
+    model = DressCode
+    form_class = DressCodeEnquiryForm
+    template_name = "add_update.html"
+    success_url = reverse_lazy("dashboard")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Update Enquiry"
+        return context
+
+    def form_valid(self, form):
+        messages.success(
+            self.request,
+            "Dress Code enquiry Updated Successfully ",
+            extra_tags="alert-success",
+        )
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        for error_list in form.errors.values():
+            for errors in error_list:
+                messages.error(self.request, errors, extra_tags="alert-danger")
+        return super().form_invalid(form)
+
+
+class EnquiryDeleteView(LoginRequiredMixin, DeleteView):
+    model = DressCode
+    success_url = reverse_lazy("dashboard")
+
+    def get(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, "cancel enquiry", extra_tags="alert-success")
+        return super().delete(request, *args, **kwargs)
+
+
+# all enquiry dress code admin view for all enquiry
+class AllEnquiryListView(LoginRequiredMixin, ListView):
+    model = DressCode
+    context_object_name = "all_enquiry"
+    template_name = "all_enquiry.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.role != "admin":
+            return redirect("403")
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "All Enquiry"
+
+        return context

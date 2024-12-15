@@ -76,24 +76,24 @@ WSGI_APPLICATION = "project.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
-
-# for external database
 # DATABASES = {
 #     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME":"rented_costumes",
-#         "USER":"postgres",
-#         "PASSWORD":"1234",
-#         "HOST":"localhost",
-#         "PORT":5433
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
 #     }
 # }
+
+# for external database
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME":"rented_costumes",
+        "USER":"postgres",
+        "PASSWORD":"1234",
+        "HOST":"localhost",
+        "PORT":5433
+    }
+}
 
 
 # Password validation

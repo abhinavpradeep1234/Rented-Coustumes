@@ -92,4 +92,26 @@ urlpatterns = [
         views.DressCodeDeleteView.as_view(),
         name="delete_dress_code",
     ),
+    # enquiry dress code Update,delete,add
+    path(
+        "dress/code/enquiry",
+        views.EnquiryCreateView.as_view(),
+        name="dress_code_enquiry",
+    ),
+    path(
+        "dress/code/enquiry/update/<int:pk>",
+        views.EnquiryUpdateView.as_view(),
+        name="update_dress_code_enquiry",
+    ),
+    path(
+        "dress/code/enquiry/delete/<int:pk>",
+        views.EnquiryDeleteView.as_view(),
+        name="delete_dress_code_enquiry",
+    ),
+    # all enquiry dress code admin view for all enquiry
+    path(
+        "enquiry",
+        views.AllEnquiryListView.as_view(),
+        name="all_enquiry",
+    ),
 ]

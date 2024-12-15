@@ -6,9 +6,9 @@
                 <li class="breadcrumb-item">
                     <a href="{% url 'home' %}" class="text-decoration-text-none text-black"><i class="bi bi-house-door-fill"></i></a>
                 </li>
-
                 <li class="breadcrumb-item">
-                    <a href="{% url 'view_rented_costumes' %}" class="text-decoration-none text-black">Rented Collections</a>
+                    <a href="{% url 'view_rented_costumes' %}"
+                       class="text-decoration-none text-black">Rented Collections</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
             </ol>
@@ -34,20 +34,28 @@
                             <div class="card-body">
                                 <h5 class="card-title text-center">{{ rented_costumes.item_name }}</h5>
                                 <p class="card-text text-center">
-                                    Per Day <i class="bi bi-currency-rupee"></i>{{ rented_costumes.per_date_price }}
-                                <p class="card-text text-center"> Size : {{ rented_costumes.size }}    <button type="button" class=" btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                   More Details
-                                       </button>
-                            </p></p>
-                            
-                                <div class="d-grid gap-2 col-6 mx-auto">
-                                    <div class="btn-group" role="group">
-                                        <a href="{% url 'update_rented_costumes' rented_costumes.id %}"
-                                           class="btn btn-success btn-sm">Update</a>
+                                    Price <i class="bi bi-currency-rupee"></i>{{ rented_costumes.per_date_price }}
+                                    <p class="card-text text-center">
+                                        Size : {{ rented_costumes.size }}
                                         <button type="button"
-                                                class="btn btn-danger btn-sm"
+                                                class=" btn btn-light btn-sm"
                                                 data-bs-toggle="modal"
-                                                data-bs-target="#exampleModal{{ rented_costumes.id }}">Delete</button>
+                                                data-bs-target="#exampleModal">More Details</button>
+                                    </p>
+                                </p>
+                                <div class="d-grid gap-2 col-6 mx-auto">
+                                    {% if request.user.role != "admin" %}<a href="" class="btn btn-success btn-sm">Book Now</a>{% endif %}
+                                    <div class="btn-group" role="group">
+                                        {% if request.user.role == "admin" %}
+                                            <a href="{% url 'update_rented_costumes' rented_costumes.id %}"
+                                               class="btn btn-success btn-sm">Update</a>
+                                            <button type="button"
+                                                    class="btn btn-danger btn-sm"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#exampleModal{{ rented_costumes.id }}">
+                                                Delete
+                                            </button>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -109,25 +117,3 @@
         <div class="alert alert-primary text-center" role="alert">No costumes Added yet!!</div>
     {% endif %}
 {% endblock content %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

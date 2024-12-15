@@ -1,4 +1,5 @@
-{% extends "base.html" %}
+ {% extends "base.html" %}
+ {% comment %}
 {% block content %}
   <div class="container">
     <nav aria-label="breadcrumb">
@@ -37,7 +38,7 @@
               </td>
               <td>
                 {% comment %} <a href="{% url 'update_complaints' complaints.id %}" class="btn btn-primary btn-sm">Update</a> {% endcomment %}
-              </td>
+              {% comment %} </td>
             </tbody>
           </tr>
           <div class="modal fade"
@@ -68,4 +69,4 @@
     {% else %}
       <div class="alert alert-primary text-center" role="alert">Currently No Boooking Yet !!!</div>
     {% endif %}
-  {% endblock content %}
+  {% endblock content %} {% endcomment %} 

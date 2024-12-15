@@ -7,16 +7,19 @@
                     <a href="{% url 'home' %}" class="text-decoration-text-none text-black"><i class="bi bi-house-door-fill"></i></a>
                 </li>
                 {% comment %} <li class="breadcrumb-item">
-                    <a href="{% url 'view_rented_costumes' %}"
-                       class="text-decoration-none text-black"></a>
+                    <a href="{% url 'view_rented_costumes' %}" class="text-decoration-none text-black"></a>
                 </li> {% endcomment %}
                 <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
             </ol>
         </nav>
     </div>
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <a href="{% url 'create_dress_code' %}"
-           class="btn btn-primary btn-sm">Dress Code</a>
+        {% if request.user.role == "admin" %}
+            <a href="{% url 'create_dress_code' %}" class="btn btn-primary btn-sm">Add Dress Code</a>
+        {% endif %}
+        {% if request.user.role != "admin" %}
+            <a href="{% url 'dress_code_enquiry' %}" class="btn btn-primary btn-sm">Dress Code Enquiry</a>
+        {% endif %}
     </div>
     {% if all_dress %}
         <div class="container mt-4">
@@ -34,7 +37,7 @@
                             <div class="card-body">
                                 <h5 class="card-title text-center">{{ dress.name }}</h5>
                                 <p class="card-text text-center">
-                                    Per Day <i class="bi bi-currency-rupee"></i>{{ dress.price }}
+                                    Price <i class="bi bi-currency-rupee"></i>{{ dress.price }}
                                     <p class="card-text text-center">
                                         Material : {{ dress.material }}
                                         {% comment %} <button type="button" class=" btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -43,28 +46,30 @@
                                     </p>
                                 </p>
                                 <div class="d-grid gap-2 col-6 mx-auto">
+                                    {% if request.user.role != "admin" %}<a href="" class="btn btn-success btn-sm">Book Now</a>{% endif %}
                                     <div class="btn-group" role="group">
-                                       <a href="{% url 'update_dress_code' dress.id %}"
-    class="btn btn-success btn-sm">Update</a> 
-                                        <button type="button"
-                                                class="btn btn-danger btn-sm"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#exampleModal{{ dress.id }}">Delete</button>
+                                        {% if request.user.role == "admin" %}
+                                            <a href="{% url 'update_dress_code' dress.id %}"
+                                               class="btn btn-success btn-sm">Update</a>
+                                            <button type="button"
+                                                    class="btn btn-danger btn-sm"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#exampleModal{{ dress.id }}">Delete</button>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal fade"
-                         id="exampleModal{{  dress.id}}"
+                         id="exampleModal{{ dress.id }}"
                          tabindex="-1"
                          aria-labelledby="exampleModalLabel"
                          aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5"
-                                        id="exampleModalLabel{{  dress.id }}">Confirm Delete</h1>
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel{{ dress.id }}">Confirm Delete</h1>
                                     <button type="button"
                                             class="btn-close"
                                             data-bs-dismiss="modal"
@@ -72,30 +77,30 @@
                                 </div>
                                 <div class="modal-body">Are you Sure you want to Delete</div>
                                 <div class="modal-footer">
-                                     <a href="{% url 'delete_dress_code'  dress.id %}"
-    class="btn btn-danger btn-sm">Confirm Delete</a> 
+                                    <a href="{% url 'delete_dress_code'  dress.id %}"
+                                       class="btn btn-danger btn-sm">Confirm Delete</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                     {% comment %} <!-- details -->
-                    <div class="modal fade"
-                         id="exampleModal"
-                         tabindex="-1"
-                         aria-labelledby="exampleModalLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Detail</h1>
-                                    <button type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="card mb-3">
-                                        <div class="card-body">Material : {{ rented_costumes.material }} , colour : {{ rented_costumes.colour }}</div>
+                                                                                                    <div class="modal fade"
+                                                                                                         id="exampleModal"
+                                                                                                         tabindex="-1"
+                                                                                                         aria-labelledby="exampleModalLabel"
+                                                                                                         aria-hidden="true">
+                                                                                                        <div class="modal-dialog modal-dialog-centered">
+                                                                                                            <div class="modal-content">
+                                                                                                                <div class="modal-header">
+                                                                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Detail</h1>
+                                                                                    <button type="button"
+                                                                                            class="btn-close"
+                                                                                            data-bs-dismiss="modal"
+                                                                                            aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="card mb-3">
+                                                        <div class="card-body">Material : {{ rented_costumes.material }} , colour : {{ rented_costumes.colour }}</div>
                                     </div>
                                     <div class="card mb-4">
                                         <div class="card-body">Description : {{ rented_costumes.description }}</div>
@@ -103,11 +108,11 @@
                                 </div>
                             </div>
                         </div>
-                    </div> {% endcomment %}
-                {% endfor %}
-            </div>
-        </div>
-    {% else %}
-        <div class="alert alert-primary text-center" role="alert">No dress code added at the moment</div>
-    {% endif %}
+</div> {% endcomment %}
+{% endfor %}
+</div>
+</div>
+{% else %}
+<div class="alert alert-primary text-center" role="alert">No dress code added at the moment</div>
+{% endif %}
 {% endblock content %}

@@ -12,8 +12,10 @@
         </nav>
     </div>
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <a href="{% url 'create_rented_costumes' %}"
-           class="btn btn-primary btn-sm">Add Costumes</a>
+        {% if request.user.role == "admin" %}
+            <a href="{% url 'create_rented_costumes' %}"
+               class="btn btn-primary btn-sm">Add Costumes</a>
+        {% endif %}
     </div>
     <div class="row">
         <div class="card mb-4 me-4 ms-4" style="width: 18rem;">

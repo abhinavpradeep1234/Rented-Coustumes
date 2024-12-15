@@ -52,8 +52,18 @@ class BookingRentedCostumes(models.Model):
 
 
 class DressCode(models.Model):
+    TYPE = (
+        ("shirt", "Shirt"),
+        ("t shirt", " T Shirt"),
+        ("kurtha", "Kurtha"),
+    )
     name = models.CharField(max_length=200, null=True, blank=True)
     material = models.CharField(max_length=200, null=True, blank=True)
-    image = models.ImageField(upload_to="dress_image",null=True, blank=True)
+    image = models.ImageField(upload_to="dress_image", null=True, blank=True)
     total_stock = models.PositiveIntegerField(null=True, blank=True)
     price = models.PositiveIntegerField(null=True, blank=True)
+    outfit_type = models.CharField(max_length=200, choices=TYPE, null=True, blank=True)
+    respond = models.CharField(max_length=200, null=True, blank=True)
+    quantity = models.PositiveBigIntegerField(default=1)
+    #address
+    #expected price

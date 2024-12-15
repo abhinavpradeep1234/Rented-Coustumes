@@ -12,7 +12,7 @@
       </nav>
     </div>
     <div class="row mt-4">
-      <div class="col-sm-4 mb-3 mb-sm-0">
+      <div class="col-sm-4 mb-4 mb-sm-0">
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">All Logged Users</h5>
@@ -34,24 +34,28 @@
           </div>
         </div>
       </div>
-      {% comment %} {% comment %} <div class="col-sm-4">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Special title treatment</h5>
-          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
+      <div class="col-sm-4">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title">All  Dress Code Enquiry</h5>
+            <p class="card-text">all dress code enquiry..</p>
+            <div class="d-md-flex justify-content-md-end">
+              <a href="{% url 'all_enquiry' %}" class="btn btn-primary btn-sm">View</a>
+            </div>
+          </div>
         </div>
       </div>
-      </div> {% endcomment %}
       <div class="col-sm-4">
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Offers</h5>
             <p class="card-text">All Offers.</p>
-            <a href="{% url 'view_offers' %}" class="btn btn-primary btn-sm">View</a>
+            <div class="d-md-flex justify-content-md-end">
+              <a href="{% url 'view_offers' %}" class="btn btn-primary btn-sm">View</a>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    {% endif %}
-  {% endblock content %}
+  {% endif %}
+{% endblock content %}

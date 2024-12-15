@@ -72,11 +72,11 @@
     <!-- Sidebar -->
     <nav class="sidebar text-white p-3">
       <div class="d-grid col-8 mx-auto">
-        <img src="{% static 'img/5.png' %}"
+        {% comment %} <img src="{% static 'img/5.png' %}"
              alt="Logo"
              class="img-fluid mb-3"
              height="70"
-             width="110">
+             width="110"> {% endcomment %}
         {% if user.profile %}
           <img src="{{ user.profile.url }}"
                alt="profile"
@@ -85,7 +85,7 @@
                id="profile-picture"
                class="rounded-circle img-fluid">
         {% else %}
-          <img src="static/img/user_default.png"
+          <img src="{% static 'img/user_default.png'%}"
                alt="profile_picture"
                width="110px"
                height="90px"
